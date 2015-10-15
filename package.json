@@ -1,0 +1,17 @@
+{
+  "name": "react-render-hooks",
+  "version": "0.1.0",
+  "scripts": {
+    "build": "babel src -d lib --source-maps true"
+  },
+  "main": "lib/globalHook.js",
+  "peerDependencies": {
+    "react": "^0.13.0 || ^0.14.0"
+  },
+  "devDependencies": {
+    "jsdom": "^6.5.1",
+    "magicpen": "^5.4.0",
+    "object-assign": "^4.0.1",
+    "react": "^0.13.3"
+  }
+}

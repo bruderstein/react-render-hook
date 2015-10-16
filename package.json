@@ -1,8 +1,9 @@
 {
-  "name": "react-render-hooks",
+  "name": "react-render-hook",
   "version": "0.1.0",
   "scripts": {
-    "build": "babel src -d lib --source-maps true"
+    "build": "babel src -d lib --source-maps true",
+    "test": "mocha --compilers js:babel/register --compilers jsx:babel/register src/tests/**/*.spec.js"
   },
   "main": "lib/globalHook.js",
   "peerDependencies": {
@@ -11,7 +12,15 @@
   "devDependencies": {
     "jsdom": "^6.5.1",
     "magicpen": "^5.4.0",
+    "mocha": "^2.3.3",
     "object-assign": "^4.0.1",
     "react": "^0.13.3"
-  }
+  },
+  "files": [
+    "lib/*.js",
+    "lib/react-devtools/backend/*.js",
+    "README.md",
+    "src/*.js",
+    "src/react-devtools/backend/*.js"
+  ]
 }

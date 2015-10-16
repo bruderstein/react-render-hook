@@ -1,1 +1,10 @@
 node_modules/
+lib/react-devtools/
+!lib/react-devtools/backend/
+wallaby.js
+lib/testHelpers/
+lib/tests/
+src/testHelpers
+src/react-devtools/
+!src/react-devtools/backend/
+src/tests/

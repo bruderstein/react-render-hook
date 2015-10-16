@@ -43,11 +43,48 @@ hook.sub('mount', component => {
 });
 
 exported.findComponent = function (component) {
+
     return ComponentMap.findComponent(component);
 };
 
 exported.findInternalComponent = function (internalComponent) {
+
     return ComponentMap.findInternalComponent(internalComponent);
 };
+
+
+function isRawType(value) {
+    var type = typeof value;
+    return type === 'string' ||
+        type === 'number' ||
+        type === 'boolean' ||
+        type === 'undefined' ||
+        value === null;
+}
+
+exported.findChildren = function (component) {
+
+    let internalComponent;
+    if (component && component.element && component.data) {
+        internalComponent = component;
+    } else {
+        internalComponent = exported.findComponent(component);
+    }
+
+    if (internalComponent && internalComponent.data.children) {
+        if (isRawType(internalComponent.data.children)) {
+            return [internalComponent.data.children];
+        }
+
+        return internalComponent.data.children.map(child => {
+            const renderedChild = exported.findInternalComponent(child);
+            if (renderedChild.data.nodeType === 'NativeWrapper') {
+                return exported.findInternalComponent(renderedChild.data.children[0]);
+            }
+            return renderedChild;
+        });
+    }
+};
+
 module.exports = exported;
 

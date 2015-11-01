@@ -75,6 +75,21 @@ describe('react-render-hook', () => {
                 }
             });
         });
+
+        it('clears the collection on clearAll()', () => {
+
+            const component = TestUtils.renderIntoDocument(<ClassComponent />);
+
+            let locatedComponent = GlobalHook.findComponent(component);
+
+            expect(locatedComponent, 'not to be null');
+            
+            GlobalHook.clearAll();
+
+            locatedComponent = GlobalHook.findComponent(component);
+
+            expect(locatedComponent, 'to be null');
+        });
     });
 
     describe('findChildren', () => {
@@ -160,4 +175,3 @@ describe('react-render-hook', () => {
         });
     });
 });
-

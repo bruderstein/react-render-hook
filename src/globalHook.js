@@ -86,5 +86,6 @@ exported.findChildren = function (component) {
     }
 };
 
-module.exports = exported;
+exported.clearAll = ComponentMap.clearAll;
 
+module.exports = exported;

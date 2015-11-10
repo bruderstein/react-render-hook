@@ -46,7 +46,7 @@ The `devtools` representation currently has the following properties  (this is c
 improvements / links to better documentation greatly appreciated)
 * `element` - the element instance
 * `data` - metadata about the instance. Contains the following important properties
-** `nodeType` - the type of node, either `'Native'` or `'Composite'`  (`'NativeWrapper'` exists too, but that is skipped over and
+** `nodeType` - the type of node, either `'Native'`, `'Text'` or `'Composite'`  (`'NativeWrapper'` exists too, but that is skipped over and
 the `'Native'` child is returned)
 ** `type` - the type of the element. This corresponds to the `React.createClass` or `class` that extends `React.Component` that
 created the element, or is a string value of the native node.

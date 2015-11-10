@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "scripts": {
     "build": "babel src -d lib --source-maps true",
+    "prepublish": "npm run build",
     "test": "mocha --compilers js:babel/register --compilers jsx:babel/register src/tests/**/*.spec.js"
   },
   "main": "lib/globalHook.js",
@@ -14,7 +15,8 @@
     "magicpen": "^5.4.0",
     "mocha": "^2.3.3",
     "object-assign": "^4.0.1",
-    "react": "^0.13.3"
+    "react": "^0.13.3",
+    "unexpected": "^10.0.2"
   },
   "files": [
     "lib/*.js",

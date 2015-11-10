@@ -99,4 +99,19 @@ describe('componentMap', () => {
         expect(located, 'to be null');
     });
 
+    it('allows updating an instance', () => {
+
+        ComponentMap.mount({
+            element: testInternalInstance2,
+            data: { test: 123, publicInstance: testInstance2 }
+        });
+
+        ComponentMap.update({
+            element: testInternalInstance2,
+            data: { test: 234, publicInstance: testInstance2 }
+        });
+        const located = ComponentMap.findComponent(testInstance2);
+        expect(located, 'to satisfy', { data: { test: 234 } });
+    })
+
 });

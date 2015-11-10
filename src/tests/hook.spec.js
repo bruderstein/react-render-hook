@@ -23,8 +23,22 @@ const TestComponent = React.createClass({
 
 class ClassComponent extends React.Component {
 
+    constructor() {
+        super();
+        this.state = { };
+
+        this.onClick = this.onClick.bind(this);
+
+    }
+
+    onClick() {
+        this.setState({
+            id: 'clicked'
+        });
+    }
+
     render() {
-        return <div className="class-component">{this.props.injectChildren}</div>;
+        return <div className="class-component" id={this.state.id} onClick={this.onClick}>{this.props.injectChildren}</div>;
     }
 }
 
@@ -83,7 +97,7 @@ describe('react-render-hook', () => {
             let locatedComponent = GlobalHook.findComponent(component);
 
             expect(locatedComponent, 'not to be null');
-            
+
             GlobalHook.clearAll();
 
             locatedComponent = GlobalHook.findComponent(component);
@@ -173,5 +187,46 @@ describe('react-render-hook', () => {
                 }]);
             });
         });
+
+        describe('after an update', () => {
+
+            let component;
+            beforeEach(() => {
+                    component = TestUtils.renderIntoDocument(<ClassComponent injectChildren={<TestComponent />} />);
+            });
+
+            it('returns the new children', () => {
+                let classComp = GlobalHook.findChildren(component);
+
+
+                expect(classComp, 'to satisfy', [{
+                    data: {
+                        nodeType: 'Native',
+                        type: 'div',
+                        props: {
+                            id: undefined
+                        }
+                    }
+                }]);
+
+                TestUtils.Simulate.click(React.findDOMNode(component));
+                classComp = GlobalHook.findChildren(component);
+
+
+                expect(classComp, 'to satisfy', [{
+                    data: {
+                        nodeType: 'Native',
+                        type: 'div',
+                        props: {
+                            id: 'clicked'
+                        }
+                    }
+                }]);
+
+
+            });
+
+
+        })
     });
 });

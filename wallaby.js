@@ -35,8 +35,10 @@ module.exports = function (wallaby) {
         tests: ['src/**/*.spec.js'],
         env: {
             type: 'node',
-            runner: '/home/dave/.nvm/versions/node/v4.1.2/bin/node'
+            runner: 'node'
         },
+
+        debug: true,
 
         workers: {
             /**

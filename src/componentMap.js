@@ -12,6 +12,11 @@ exports.mount = function (component) {
     elementsInRoot.push(component);
 };
 
+exports.update = function (component) {
+    const existing = exports.findInternalComponent(component.element);
+    existing.data = component.data;
+};
+
 exports.findComponent = function (component) {
     if (component && component._reactInternalInstance) {
         const elementsInRoot = nodes.get(component._reactInternalInstance._rootNodeID);

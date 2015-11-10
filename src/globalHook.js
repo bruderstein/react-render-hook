@@ -42,6 +42,10 @@ hook.sub('mount', component => {
     ComponentMap.mount(component);
 });
 
+hook.sub('update', component => {
+    ComponentMap.update(component);
+});
+
 exported.findComponent = function (component) {
 
     return ComponentMap.findComponent(component);

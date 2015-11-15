@@ -10,19 +10,37 @@ if (typeof window !== 'undefined' && typeof window.__REACT_DEVTOOLS_GLOBAL_HOOK_
     delete window.__REACT_DEVTOOLS_GLOBAL_HOOK__;
 }
 
+
 // Install the global hook
 const tempGlobal = {};
 
 GlobalHook(tempGlobal);
 const hook = tempGlobal.__REACT_DEVTOOLS_GLOBAL_HOOK__;
-global.__REACT_DEVTOOLS_GLOBAL_HOOK__ = hook;
+
+
+if (typeof global !== 'undefined') {
+    global.__REACT_DEVTOOLS_GLOBAL_HOOK__ = hook;
+}
+
 if (typeof window !== 'undefined') {
     window.__REACT_DEVTOOLS_GLOBAL_HOOK__ = hook;
+}
+
+let globalWindowTempDefined = false;
+if (typeof window === 'undefined' && typeof global !== 'undefined') {
+    // If we've got no DOM emulation, and we're in a node environment
+    // we'll emulate window just while we install the GlobalHook, as that expects window to be there
+    global.window = {};
+    globalWindowTempDefined = true;
 }
 
 // Inject the backend
 Backend(hook);
 
+if (globalWindowTempDefined) {
+    // We can remove our temporary object, now that Backend has done its thing
+    delete global.window;
+}
 
 const exported = {
     hook,

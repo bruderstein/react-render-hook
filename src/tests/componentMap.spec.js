@@ -112,6 +112,19 @@ describe('componentMap', () => {
         });
         const located = ComponentMap.findComponent(testInstance2);
         expect(located, 'to satisfy', { data: { test: 234 } });
-    })
+    });
+
+    it('ignores updates to unknown instances', () => {
+
+        // This appears to happen when the shallow renderer is used
+        ComponentMap.clearAll();
+
+        ComponentMap.update({
+            element: testInternalInstance2,
+            data: { test: 234, publicInstance: testInstance2 }
+        });
+        const located = ComponentMap.findComponent(testInstance2);
+        expect(located, 'to be null');
+    });
 
 });

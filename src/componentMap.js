@@ -14,7 +14,9 @@ exports.mount = function (component) {
 
 exports.update = function (component) {
     const existing = exports.findInternalComponent(component.element);
-    existing.data = component.data;
+    if (existing) {
+        existing.data = component.data;
+    }
 };
 
 exports.findComponent = function (component) {

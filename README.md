@@ -1,7 +1,7 @@
 # react-render-hook
 
 `react-render-hook` uses the [React-devtools](https://github.com/facebook/react-devtools) hook to watch for rendering React components,
-and provide an inteface to get to the virtual DOM tree and find rendered elements and get the metadata about them.
+and provide an interface to get to the virtual DOM tree and find rendered elements and get the metadata about them.
 
 This is meant to be used from libraries that need access to the whole virtual DOM tree, such as testing/assertion libraries.
 

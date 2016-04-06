@@ -11,6 +11,7 @@
     "react": "^0.13.0 || ^0.14.0"
   },
   "devDependencies": {
+    "babel": "^5.8.38",
     "jsdom": "^6.5.1",
     "magicpen": "^5.4.0",
     "mocha": "^2.3.3",

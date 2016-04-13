@@ -3,12 +3,11 @@ import EmulateDom from '../testHelpers/emulateDom';
 
 import GlobalHook from '../globalHook';
 
-import React from 'react/addons';
-
+import React from 'react';
+import TestUtils from 'react-addons-test-utils';
 import Unexpected from 'unexpected';
 
 const expect = Unexpected.clone();
-const TestUtils = React.addons.TestUtils;
 
 
 const versionParts = React.version.split('.');
@@ -209,7 +208,8 @@ describe('react-render-hook', () => {
                     }
                 }]);
 
-                TestUtils.Simulate.click(React.findDOMNode(component));
+                const [div] = TestUtils.scryRenderedDOMComponentsWithTag(component, 'div');
+                TestUtils.Simulate.click(div);
                 classComp = GlobalHook.findChildren(component);
 
 

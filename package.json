@@ -4,19 +4,22 @@
   "scripts": {
     "build": "babel src -d lib --source-maps true",
     "prepublish": "npm run build",
-    "test": "mocha --compilers js:babel/register --compilers jsx:babel/register src/tests/**/*.spec.js"
+    "test": "mocha --compilers js:babel-register --compilers jsx:babel-register src/tests/**/*.spec.js"
   },
   "main": "lib/globalHook.js",
-  "peerDependencies": {
-    "react": "^0.13.0 || ^0.14.0"
-  },
   "devDependencies": {
-    "babel": "^5.8.38",
+    "babel": "^6.5.2",
+    "babel-preset-es2015": "^6.6.0",
+    "babel-preset-react": "^6.5.0",
+    "babel-preset-stage-2": "^6.5.0",
+    "babel-register": "^6.7.2",
     "jsdom": "^6.5.1",
     "magicpen": "^5.4.0",
     "mocha": "^2.3.3",
     "object-assign": "^4.0.1",
-    "react": "^0.13.3",
+    "react": "^15.0.0",
+    "react-addons-test-utils": "^15.0.0",
+    "react-dom": "^15.0.0",
     "unexpected": "^10.0.2"
   },
   "files": [

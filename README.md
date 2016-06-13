@@ -69,7 +69,8 @@ component.
 # Contributing
 
 Contributions are very welcome. This project was made without really any knowledge of the devtools internals, so it is not unlikely that some
-things are sub-optimal, not best practice, or just plain wrong. The tests show that the rendered content is caught and located by the  
+things are sub-optimal, not best practice, or just plain wrong. The tests show that the rendered content is caught and located by the API.
+
 
 # License
 

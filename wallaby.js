@@ -1,6 +1,6 @@
 
 
-var Babel = require('babel');
+var Babel = require('babel-core');
 
 module.exports = function (wallaby) {
 
@@ -54,12 +54,10 @@ module.exports = function (wallaby) {
 
         compilers: {
             '**/*.js': wallaby.compilers.babel({
-                babel: Babel,
-                stage: 0
+                babel: Babel
             }),
             'src/**/*.jsx': wallaby.compilers.babel({
-                babel: Babel,
-                stage: 0
+                babel: Babel
             })
         }
     };

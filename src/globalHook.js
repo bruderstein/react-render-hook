@@ -65,12 +65,10 @@ hook.sub('update', component => {
 });
 
 exported.findComponent = function (component) {
-
     return ComponentMap.findComponent(component);
 };
 
 exported.findInternalComponent = function (internalComponent) {
-
     return ComponentMap.findInternalComponent(internalComponent);
 };
 
@@ -87,7 +85,7 @@ function isRawType(value) {
 exported.findChildren = function (component) {
 
     let internalComponent;
-    if (component && component.element && component.data) {
+    if (component && component.data && component.data.publicInstance) {
         internalComponent = component;
     } else {
         internalComponent = exported.findComponent(component);

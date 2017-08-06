@@ -43,9 +43,14 @@ class ClassComponent extends React.Component {
     }
 }
 
-function FuncComponent(props) {
+function StatelessComponent(props) {
+    return <div className={props.className}>Stateless content</div>;
+}
 
-    return null;
+class StatelessWrapper extends React.Component {
+  render() {
+    return React.Children.only(this.props.children);
+  }
 }
 
 
@@ -257,11 +262,26 @@ describe('react-render-hook', () => {
                         }
                     }
                 }]);
-
-
             });
+        });
+    });
 
+    describe('findChildren with stateless child', function () {
+      let component;
 
-        })
+      beforeEach(() => {
+        component = TestUtils.renderIntoDocument(<StatelessWrapper><StatelessComponent className="foo" /></StatelessWrapper>);
+      });
+
+      it('finds the stateless component', function () {
+        const children = GlobalHook.findChildren(component);
+        expect(children[0].data, 'to satisfy', {
+          nodeType: 'Composite',
+          type: StatelessComponent,
+          props: {
+            className: 'foo'
+          }
+        });
+      });
     });
 });

@@ -4,32 +4,33 @@ import ComponentMap from '../componentMap';
 
 const expect = Unexpected.clone();
 
-function TestElement(debugID, name) {
-    this._debugID = debugID;
+function TestElement(name) {
+  this.props = {};
     // Just some property for identification later - doesn't matter what it is
     this.name = name;
 }
 
-function getPublicInstance(internalInstance) {
-    if (!internalInstance.publicInstance) {
-        internalInstance.publicInstance = {
-            name: internalInstance.name,
-            _reactInternalInstance: internalInstance
-        };
-    }
-
-    return internalInstance.publicInstance;
+function getInternalInstance(publicInstance) {
+    return {
+        stateNode: publicInstance
+    };
 }
 
-const testInternalInstance1 = new TestElement(1, 'one');
-const testInstance1 = getPublicInstance(testInternalInstance1);
-const testInternalInstance2 = new TestElement(2, 'two');
-const testInstance2 = getPublicInstance(testInternalInstance2);
-
-const testInternalInstance2b = new TestElement(2, 'two - second');
-const testInstance2b = getPublicInstance(testInternalInstance2b);
-
 describe('componentMap', () => {
+
+
+    let testInstance1, testInternalInstance1;
+    let testInstance2, testInternalInstance2;
+    let testInstance2b, testInternalInstance2b;
+    beforeEach(function () {
+
+      testInstance1 = new TestElement('one');
+      testInternalInstance1 = getInternalInstance(testInstance1);
+      testInstance2 = new TestElement('two');
+      testInternalInstance2 = getInternalInstance(testInstance2);
+      testInstance2b = new TestElement('two -second');
+      testInternalInstance2b = getInternalInstance(testInstance2b);
+    });
 
     it('finds a single added component', () => {
 
@@ -48,12 +49,12 @@ describe('componentMap', () => {
     it('finds a component when two different roots are added', () => {
 
         ComponentMap.mount({
-            element: testInternalInstance1,
+            internalInstance: testInternalInstance1,
             data: { test: 123, publicInstance: testInstance1 }
         });
 
         ComponentMap.mount({
-            element: testInternalInstance2,
+            internalInstance: testInternalInstance2,
             data: { test: 123, publicInstance: testInstance2 }
         });
 
@@ -89,7 +90,7 @@ describe('componentMap', () => {
     it('does not find a component after clearAll()', () => {
 
         ComponentMap.mount({
-            element: testInternalInstance2,
+            internalInstance: testInternalInstance2,
             data: { test: 123, publicInstance: testInstance2 }
         });
 

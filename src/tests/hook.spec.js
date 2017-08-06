@@ -4,7 +4,8 @@ import EmulateDom from '../testHelpers/emulateDom';
 import GlobalHook from '../globalHook';
 
 import React from 'react';
-import TestUtils from 'react-addons-test-utils';
+import TestUtils from 'react-dom/test-utils';
+import createClass from 'create-react-class';
 import Unexpected from 'unexpected';
 
 const expect = Unexpected.clone();
@@ -13,8 +14,9 @@ const expect = Unexpected.clone();
 const versionParts = React.version.split('.');
 const isReact014 = (parseFloat(versionParts[0] + '.' + versionParts[1]) >= 0.14);
 
-const TestComponent = React.createClass({
+const TestComponent = createClass({
 
+  displayName: 'TestComponent',
     render() {
         return <div className={this.props.className}>Test Component</div>;
     }
@@ -41,9 +43,14 @@ class ClassComponent extends React.Component {
     }
 }
 
-function FuncComponent(props) {
+function StatelessComponent(props) {
+    return <div className={props.className}>Stateless content</div>;
+}
 
-    return null;
+class StatelessWrapper extends React.Component {
+  render() {
+    return React.Children.only(this.props.children);
+  }
 }
 
 
@@ -59,19 +66,53 @@ describe('react-render-hook', () => {
 
         it('finds a component using renderIntoDocument', () => {
 
-            const component = TestUtils.renderIntoDocument(<TestComponent />);
+            const component = TestUtils.renderIntoDocument(<TestComponent className="foo"/>);
 
             const locatedComponent = GlobalHook.findComponent(component);
 
             expect(locatedComponent, 'to satisfy', {
-                element: expect.it('to be an', 'object'),
                 data: {
                     nodeType: 'Composite',
                     type: expect.it('to be', TestComponent),    // Unexpected calls functions that are in 'to satisfy'
-                    name: 'TestComponent'                       // Hence the extra `expect.it()`
+                    name: 'TestComponent',                      // Hence the extra `expect.it()`
+                    publicInstance: {
+                        props: { className: 'foo' }
+                    }
                 }
             });
+
         });
+
+      it('finds the correct component when rendering more than one', () => {
+
+        const component = TestUtils.renderIntoDocument(<TestComponent className="foo"/>);
+        const component2 = TestUtils.renderIntoDocument(<TestComponent className="bar"/>);
+
+        const locatedComponent = GlobalHook.findComponent(component);
+        const locatedComponent2 = GlobalHook.findComponent(component2);
+
+        expect(locatedComponent, 'to satisfy', {
+          data: {
+            nodeType: 'Composite',
+            type: expect.it('to be', TestComponent),    // Unexpected calls functions that are in 'to satisfy'
+            name: 'TestComponent',                      // Hence the extra `expect.it()`
+            publicInstance: {
+              props: { className: 'foo' }
+            }
+          }
+        });
+
+        expect(locatedComponent2, 'to satisfy', {
+          data: {
+            nodeType: 'Composite',
+            type: expect.it('to be', TestComponent),    // Unexpected calls functions that are in 'to satisfy'
+            name: 'TestComponent',                      // Hence the extra `expect.it()`
+            publicInstance: {
+              props: { className: 'bar' }
+            }
+          }
+        });
+      });
 
         it('finds a class component', () => {
 
@@ -80,11 +121,11 @@ describe('react-render-hook', () => {
             const locatedComponent = GlobalHook.findComponent(component);
 
             expect(locatedComponent, 'to satisfy', {
-                element: expect.it('to be an', 'object'),
                 data: {
                     nodeType: 'Composite',
                     type: expect.it('to be', ClassComponent),
-                    name: 'ClassComponent'
+                    name: 'ClassComponent',
+                    publicInstance: expect.it('to be an', 'object')
                 }
             });
         });
@@ -122,13 +163,13 @@ describe('react-render-hook', () => {
                 const locatedComponent = GlobalHook.findChildren(component);
 
                 expect(locatedComponent, 'to satisfy', [{
-                    element: expect.it('to be an', 'object'),
                     data: {
                         nodeType: 'Native',
                         type: 'div',
                         props: {
                             className: 'class-component'
-                        }
+                        },
+                        publicInstance: expect.it('to be an', 'object'),
                     }
                 }]);
             });
@@ -164,10 +205,10 @@ describe('react-render-hook', () => {
 
                 const theDiv = GlobalHook.findChildren(component);
                 expect(theDiv, 'to satisfy', [{
-                    element: expect.it('to be an', 'object'),
                     data: {
                         nodeType: 'Native',
-                        type: 'div'
+                        type: 'div',
+                      publicInstance: expect.it('to be an', 'object'),
                     }
                 }]);
 
@@ -178,10 +219,10 @@ describe('react-render-hook', () => {
                 const theDiv = GlobalHook.findChildren(component);
                 const divChildren = GlobalHook.findChildren(theDiv[0]);
                 expect(divChildren, 'to satisfy', [{
-                    element: expect.it('to be an', 'object'),
                     data: {
                         nodeType: 'Composite',
-                        type: expect.it('to be', TestComponent)
+                        type: expect.it('to be', TestComponent),
+                        publicInstance: expect.it('to be an', 'object'),
                     }
                 }]);
             });
@@ -212,7 +253,6 @@ describe('react-render-hook', () => {
                 TestUtils.Simulate.click(div);
                 classComp = GlobalHook.findChildren(component);
 
-
                 expect(classComp, 'to satisfy', [{
                     data: {
                         nodeType: 'Native',
@@ -222,11 +262,26 @@ describe('react-render-hook', () => {
                         }
                     }
                 }]);
-
-
             });
+        });
+    });
 
+    describe('findChildren with stateless child', function () {
+      let component;
 
-        })
+      beforeEach(() => {
+        component = TestUtils.renderIntoDocument(<StatelessWrapper><StatelessComponent className="foo" /></StatelessWrapper>);
+      });
+
+      it('finds the stateless component', function () {
+        const children = GlobalHook.findChildren(component);
+        expect(children[0].data, 'to satisfy', {
+          nodeType: 'Composite',
+          type: StatelessComponent,
+          props: {
+            className: 'foo'
+          }
+        });
+      });
     });
 });

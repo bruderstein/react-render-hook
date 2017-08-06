@@ -1,57 +1,29 @@
 
-const nodes = new Map();
+const publicInstanceToData = new Map();
+const privateInstanceToData = new Map();
 
 exports.mount = function (component) {
-
-    const rootNodeID = component.element._rootNodeID;
-    let elementsInRoot = nodes.get(rootNodeID);
-    if (elementsInRoot === undefined) {
-        elementsInRoot = [];
-        nodes.set(rootNodeID, elementsInRoot);
-    }
-    elementsInRoot.push(component);
+  if (component.internalInstance.stateNode) {
+    publicInstanceToData.set(component.internalInstance.stateNode, component)
+  }
+  privateInstanceToData.set(component.internalInstance, component);
 };
 
 exports.update = function (component) {
-    const existing = exports.findInternalComponent(component.element);
+    const existing = exports.findInternalComponent(component.internalInstance);
     if (existing) {
         existing.data = component.data;
     }
 };
 
 exports.findComponent = function (component) {
-    if (component && component._reactInternalInstance) {
-        const elementsInRoot = nodes.get(component._reactInternalInstance._rootNodeID);
-        if (elementsInRoot) {
-            for (let index = elementsInRoot.length - 1; index >= 0; --index) {
-                if (elementsInRoot[index].data.publicInstance === component) {
-                    const renderedComponent = elementsInRoot[index];
-                    if (renderedComponent.data.nodeType === 'NativeWrapper') {
-                        return exports.findInternalComponent(renderedComponent.data.children[0]);
-                    }
-                    return renderedComponent;
-                }
-            }
-        }
-    }
-
-    return null;
+   return publicInstanceToData.get(component) || null;
 };
 
 exports.findInternalComponent = function (internalComponent) {
-    if (internalComponent) {
-        const elementsInRoot = nodes.get(internalComponent._rootNodeID);
-        if (elementsInRoot) {
-            for (let index = elementsInRoot.length - 1; index >= 0; --index) {
-                if (elementsInRoot[index].element === internalComponent) {
-                    return elementsInRoot[index];
-                }
-            }
-        }
-
-    }
+  return privateInstanceToData.get(internalComponent) || null;
 };
 
 exports.clearAll = function () {
-   nodes.clear();
+   publicInstanceToData.clear();
 };

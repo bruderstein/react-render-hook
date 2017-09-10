@@ -15,3 +15,6 @@ Updates and further information in package.json (thanks @valscion)
 ## v1.0.0
 Update to support fiber (React v16)
 Converted to use ES6 Maps with objects as keys (this must be supported by the runtime - Node v4 onwards is fine)
+
+## v1.0.1
+Update devDependencies

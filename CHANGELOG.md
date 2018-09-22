@@ -18,3 +18,6 @@ Converted to use ES6 Maps with objects as keys (this must be supported by the ru
 
 ## v1.0.1
 Update devDependencies
+
+## v1.1.0
+React 16.5.0 compatibility by updating devtools. Thanks @albertfdp for tracking this down!

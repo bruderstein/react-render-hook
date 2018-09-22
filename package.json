@@ -1,6 +1,6 @@
 {
   "name": "react-render-hook",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Hooks to React.js rendering, to enable access to the virtual DOM (as shown in React devtools)",
   "scripts": {
     "build": "babel src -d lib --source-maps true",

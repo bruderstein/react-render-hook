@@ -24,3 +24,6 @@ React 16.5.0 compatibility by updating devtools. Thanks @albertfdp for tracking 
 
 ## v1.1.1
 Add fbjs as a dependency needed by devtools in some circumstances (the tests in this package weren't affected, not sure why yet)
+
+## v2.0.0
+Update react-devtool to support react 16.9 onwards
